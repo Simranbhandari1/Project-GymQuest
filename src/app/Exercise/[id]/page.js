@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Confetti from "react-confetti";
-import LiquidChrome from "@/app/components/organisms/LiquidChrome";
+import LiquidChrome from "@/app/components/organisms/LiquidChrome"; // adjust path if needed
 
 export default function ExerciseDetail() {
   const { id } = useParams();
@@ -26,60 +26,51 @@ export default function ExerciseDetail() {
   // Timer effect
   useEffect(() => {
     let interval;
-    if (running) {
-      interval = setInterval(() => setTime((prev) => prev + 1), 1000);
-    }
+    if (running) interval = setInterval(() => setTime((prev) => prev + 1), 1000);
     return () => clearInterval(interval);
   }, [running]);
 
-  // Confetti effect when all sessions are done
+  // Confetti effect
   useEffect(() => {
     if (sessions.every((s) => s)) {
       setConfetti(true);
-      setTimeout(() => setConfetti(false), 5000);
+      const timeout = setTimeout(() => setConfetti(false), 5000);
+      return () => clearTimeout(timeout);
     }
   }, [sessions]);
 
-  // Track window size for confetti
+  // Window size for confetti
   useEffect(() => {
     setDimensions({ width: window.innerWidth, height: window.innerHeight });
-    const handleResize = () =>
-      setDimensions({ width: window.innerWidth, height: window.innerHeight });
+    const handleResize = () => setDimensions({ width: window.innerWidth, height: window.innerHeight });
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   if (!exercise) {
-    return (
-      <div className="text-center p-8 text-white text-lg">
-        Loading exercise...
-      </div>
-    );
+    return <div className="text-white text-center mt-20">Loading exercise...</div>;
   }
 
   const youtubeID = extractYouTubeID(exercise.youtubeUrl);
 
   return (
     <div className="relative min-h-screen mt-20 flex flex-col items-center justify-center p-6 overflow-hidden bg-gradient-to-b from-[#0f3e3b]/80 via-black/30 to-[#0f3e3b]/80 backdrop-blur-2xl">
-      {/* Background Liquid Effect */}
-      <div className="absolute bg-gradient-to-b from-black via-[#0f3e3b] to-black inset-0 z-0 pointer-events-none">
+      {/* Background Liquid */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
         <LiquidChrome />
       </div>
 
-      {confetti && (
-        <Confetti width={dimensions.width} height={dimensions.height} />
-      )}
+      {confetti && <Confetti width={dimensions.width} height={dimensions.height} />}
 
-      {/* Blurry glass container */}
       <div className="relative z-10 bg-white/10 backdrop-blur-xl border border-white/20 p-8 rounded-2xl shadow-2xl max-w-4xl w-full text-center">
         <h1 className="text-3xl font-bold mb-6 text-white">{exercise.title}</h1>
 
-        {/* YouTube video */}
+        {/* YouTube Video */}
         {youtubeID ? (
           <iframe
             width="800"
             height="450"
-            src={`https://www.youtube.com/embed/${youtubeID}?autoplay=0&mute=0`}
+            src={`https://www.youtube.com/embed/${youtubeID}?autoplay=1&mute=0`}
             title={exercise.title}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
@@ -89,11 +80,9 @@ export default function ExerciseDetail() {
           <p className="italic text-gray-300">No video available</p>
         )}
 
-        {/* Timer Section */}
+        {/* Timer */}
         <div className="mt-8">
-          <h2 className="text-xl font-semibold mb-2 text-white">
-            Workout Timer
-          </h2>
+          <h2 className="text-xl font-semibold mb-2 text-white">Workout Timer</h2>
           <p className="text-2xl font-mono text-green-400">
             {Math.floor(time / 60).toString().padStart(2, "0")}:
             {(time % 60).toString().padStart(2, "0")}
@@ -117,26 +106,18 @@ export default function ExerciseDetail() {
           </div>
         </div>
 
-        {/* Sessions Section */}
+        {/* Sessions */}
         <div className="mt-10">
-          <h2 className="text-xl font-semibold mb-4 text-white">
-            Workout Progress
-          </h2>
-
-          {/* Progress text */}
+          <h2 className="text-xl font-semibold mb-4 text-white">Workout Progress</h2>
           <p className="text-gray-300 mb-4">
             Completed {sessions.filter(Boolean).length} of {sessions.length} sets
           </p>
-
-          {/* Buttons instead of plain checkboxes */}
           <div className="flex justify-center gap-6 flex-wrap">
             {sessions.map((done, i) => (
               <button
                 key={i}
                 onClick={() =>
-                  setSessions((prev) =>
-                    prev.map((s, idx) => (idx === i ? !s : s))
-                  )
+                  setSessions((prev) => prev.map((s, idx) => (idx === i ? !s : s)))
                 }
                 className={`px-6 py-3 rounded-lg font-semibold transition-all duration-300 ${
                   done
@@ -149,12 +130,10 @@ export default function ExerciseDetail() {
             ))}
           </div>
 
-          {/* Done message when all completed */}
           {sessions.every((s) => s) && (
             <div className="mt-6">
               <h3 className="text-2xl font-bold text-green-400">🎉 DONE! 🎉</h3>
               <p className="text-gray-300">Great job completing all sets!</p>
-
               <button
                 onClick={() => setConfetti(true)}
                 className="mt-4 px-6 py-2 rounded-lg bg-yellow-500 hover:bg-yellow-600 text-black font-semibold shadow-md"
@@ -169,10 +148,9 @@ export default function ExerciseDetail() {
   );
 }
 
-// Extract YouTube ID
+// Helper: extract YouTube ID
 function extractYouTubeID(url) {
   if (!url) return null;
-  const reg =
-    /(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/;
+  const reg = /(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/;
   return url.match(reg)?.[1] || null;
 }

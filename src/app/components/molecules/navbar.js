@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { useAuth } from "@/app/api/auth/AuthContext";
-import { FaUserCircle, FaHome, FaDumbbell, FaAppleAlt, FaHeartbeat, FaCalculator, FaEnvelope, FaCog } from "react-icons/fa";
+import { FaUserCircle } from "react-icons/fa";
 import Image from "next/image";
 
 export default function Navbar() {
@@ -18,19 +18,19 @@ export default function Navbar() {
   if (pathname.startsWith("/Admin")) return null;
 
   const navLinks = [
-    { name: "Home", href: "/", icon: <FaHome /> },
-    { name: "Workouts", href: "/Exercise", icon: <FaDumbbell /> },
-    { name: "Fitness", href: "/Gemini", icon: <FaHeartbeat /> },
-    { name: "Nutrition", href: "/Meals", icon: <FaAppleAlt /> },
-    { name: "BMI", href: "/BMI", icon: <FaCalculator /> },
-    { name: "Contact", href: "/ContactUS", icon: <FaEnvelope /> },
+    { name: "Home", href: "/" },
+    { name: "Workouts", href: "/Exercise" },
+    { name: "Fitness", href: "/Gemini" },
+    { name: "Nutrition", href: "/Meals" },
+    { name: "BMI", href: "/BMI" },
+    { name: "Contact", href: "/ContactUS" },
   ];
 
   const finalNavLinks = [
     ...navLinks,
     ...(user &&
     user.email?.toLowerCase().trim() === ADMIN_EMAIL?.toLowerCase().trim()
-      ? [{ name: "Admin Panel", href: "/Admin", icon: <FaCog /> }]
+      ? [{ name: "Admin Panel", href: "/Admin" }]
       : []),
   ];
 
@@ -52,7 +52,7 @@ export default function Navbar() {
               src="/images/logo.jpg"
               alt="MuscleFactory Logo"
               width={96}
-              height={96}
+              height={100}
               className="object-contain"
               priority
             />
@@ -65,9 +65,9 @@ export default function Navbar() {
             <Link
               key={link.name}
               href={link.href}
-              className="border border-white rounded-full px-4 py-1.5 flex items-center gap-2 hover:bg-white hover:text-black hover:scale-105 transition-all duration-200 shadow-sm"
+              className="border border-white rounded-full px-4 py-1.5 hover:bg-white hover:text-black hover:scale-105 transition-all duration-200 shadow-sm"
             >
-              {link.icon} {link.name}
+              {link.name}
             </Link>
           ))}
         </nav>
@@ -111,9 +111,9 @@ export default function Navbar() {
 
       {/* Mobile Sidebar */}
       {mobileOpen && (
-        <div className="md:hidden fixed inset-0 z-[999] bg-gradient-to-br from-black via-[#1e2f2e] to-gray-900 bg-opacity-95 backdrop-blur-md text-white flex flex-col p-6 transition-all duration-300 ease-in-out">
+        <div className="md:hidden  fixed inset-0 z-[999] bg-gray-900 text-white flex flex-col p-6 transition-all duration-300 ease-in-out">
           {/* Top Section */}
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex  items-center justify-between mb-6">
             <Link href="/" className="flex items-center" onClick={() => setMobileOpen(false)}>
               <div className="relative h-12 w-12">
                 <Image
@@ -142,9 +142,9 @@ export default function Navbar() {
                 key={link.name}
                 href={link.href}
                 onClick={() => setMobileOpen(false)}
-                className="flex items-center gap-3 px-4 py-3 rounded-xl bg-gray-800/40 border border-gray-700 hover:bg-emerald-500 hover:text-black hover:scale-105 transition-all duration-200 ease-in-out shadow-lg"
+                className="px-4 py-3 rounded-xl bg-gray-800 hover:bg-emerald-500 hover:text-black transition-all duration-200 shadow-lg"
               >
-                <span className="text-lg">{link.icon}</span> {link.name}
+                {link.name}
               </Link>
             ))}
           </nav>
@@ -156,9 +156,9 @@ export default function Navbar() {
                 <Link
                   href="/Profile"
                   onClick={() => setMobileOpen(false)}
-                  className="flex items-center gap-2 px-4 py-3 rounded-xl bg-gray-800/40 border border-gray-700 hover:bg-white hover:text-black transition-all duration-200 text-lg shadow-lg"
+                  className="px-4 py-3 rounded-xl bg-gray-800 hover:bg-white hover:text-black transition-all duration-200 shadow-lg"
                 >
-                  <FaUserCircle className="text-2xl" /> Profile
+                  Profile
                 </Link>
                 <button
                   onClick={() => {

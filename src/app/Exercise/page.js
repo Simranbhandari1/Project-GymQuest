@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { getCloudinaryUrl } from "@/lib/cloudinary";
-import LiquidChrome from "../components/organisms/LiquidChrome";
+import LiquidChrome from "@/app/components/organisms/LiquidChrome"; // Adjust path if needed
+import { getCloudinaryUrl } from "@/lib/cloudinary"; // Helper to get Cloudinary URL
 
 export default function ExerciseList() {
   const [exercises, setExercises] = useState(null);
@@ -16,7 +16,7 @@ export default function ExerciseList() {
       .catch(() => setExercises([]));
   }, []);
 
-  // Skeleton card (loading state)
+  // Loading skeleton
   const SkeletonCard = () => (
     <div className="animate-pulse bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl shadow-lg p-4 w-[340px] h-[360px]">
       <div className="bg-gray-700 bg-opacity-40 rounded h-2/3 mb-4"></div>
@@ -27,12 +27,12 @@ export default function ExerciseList() {
 
   return (
     <div className="relative min-h-screen overflow-hidden">
-      {/* ✅ Background animation */}
+      {/* Background animation */}
       <div className="absolute inset-0 z-0 bg-gradient-to-b from-black via-[#0f3e3b] to-black pointer-events-none">
         <LiquidChrome />
       </div>
 
-      {/* ✅ Foreground content */}
+      {/* Foreground content */}
       <div className="relative z-10 max-w-6xl mt-20 mx-auto p-6">
         <div className="grid gap-12 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 justify-center">
           {/* Loading skeletons */}
@@ -47,14 +47,13 @@ export default function ExerciseList() {
           )}
 
           {/* Exercise cards */}
-          {exercises &&
-            exercises.length > 0 &&
+          {exercises?.length > 0 &&
             exercises.map((ex) => {
-              const imageUrl = getCloudinaryUrl(ex.image || ex.thumbnail || "");
+              const imageUrl = getCloudinaryUrl(ex.thumbnailPublicId || "");
               return (
                 <Link
                   key={ex._id}
-                  href={`/Exercise/${ex._id}`}
+                  href={`/Exercise/${ex._id}`} // <-- Uppercase "E" matches folder
                   className="bg-white/10 backdrop-blur-lg border border-white/20 text-white rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transform transition-all duration-300 p-4 cursor-pointer w-[340px] h-[360px] block"
                 >
                   {imageUrl ? (
@@ -74,7 +73,7 @@ export default function ExerciseList() {
                   )}
                   <h2 className="text-xl font-bold mt-4">{ex.title}</h2>
                   <p className="text-gray-200">
-                    {ex.description?.slice(0, 60)}...
+                    {ex.description ? ex.description.slice(0, 60) + "..." : "No description"}
                   </p>
                 </Link>
               );
