@@ -11,6 +11,26 @@
 
 // const User = models.User || model('User', userSchema);
 // export default User;
+// import mongoose from "mongoose";
+
+// const userSchema = new mongoose.Schema({
+//   email: String,
+//   password: String,
+//   name: String,
+//   image: String,
+//   loginMethod: String,
+//   refreshTokens: {
+//     type: [String],
+//     default: [],
+//   },
+// });
+
+
+// const User = mongoose.models.User || mongoose.model("User", userSchema);
+// export default User;
+
+
+
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({

@@ -4,6 +4,7 @@ import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import ProtectedRoute from "../components/organisms/Access/ProtectedRoute";
 import LiquidChrome from "../components/organisms/LiquidChrome";
+import Navbar from "../components/molecules/navbar";
 
 function BMICalculatorPage() {
   const [feet, setFeet] = useState('');
@@ -98,6 +99,7 @@ function BMICalculatorPage() {
   };
 
   return (
+    
     <div className="relative bg-gradient-to-b mt-10 from-black via-[#0f3e3b] to-black  min-h-screen overflow-hidden">
       <div className="absolute inset-0 z-0">
         <LiquidChrome baseColor={[0.05, 0.1, 0.1]} interactive />

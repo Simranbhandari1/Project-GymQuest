@@ -15,37 +15,35 @@ export default function SignupPage() {
     confirmPassword: "",
   });
 
-  // ✅ Email validator
+  // Email validator
   const validateEmail = (email) =>
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-  // ✅ Input change
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // ✅ Submit form
   const handleSubmit = async () => {
     const { email, password, confirmPassword } = formData;
 
     if (!email || !password || !confirmPassword) {
-      toast.error("❌ All fields are required");
+      toast.error("All fields are required");
       return;
     }
 
     if (!validateEmail(email)) {
-      toast.error("❌ Invalid email format");
+      toast.error("Invalid email format");
       return;
     }
 
     if (password.length < 6) {
-      toast.error("❌ Password must be at least 6 characters");
+      toast.error("Password must be at least 6 characters");
       return;
     }
 
     if (password !== confirmPassword) {
-      toast.error("❌ Passwords do not match");
+      toast.error("Passwords do not match");
       return;
     }
 
@@ -59,20 +57,18 @@ export default function SignupPage() {
       const data = await res.json();
 
       if (res.ok) {
-        toast.success("✅ Account created successfully!");
-        localStorage.setItem("user", JSON.stringify(data.user || { email }));
-        setTimeout(() => {
-          router.push("/");
-        }, 1000);
+        toast.success("Account created successfully");
+        localStorage.setItem("user", JSON.stringify(data.user));
+        router.push("/"); // Redirect immediately
       } else {
-        toast.error(data.error || "❌ Signup failed");
+        toast.error(data.error || "Signup failed");
       }
     } catch (err) {
-      toast.error("❌ Server error");
+      toast.error("Server error");
     }
   };
 
-  // ✅ Google login response
+  // Google login response
   const handleGoogleCredentialResponse = useCallback(
     async (response) => {
       try {
@@ -85,20 +81,20 @@ export default function SignupPage() {
         const data = await res.json();
 
         if (res.ok) {
-          toast.success("✅ Logged in with Google");
+          toast.success("Logged in with Google");
           localStorage.setItem("user", JSON.stringify(data.user));
           router.push("/");
         } else {
-          toast.error(data.error || "❌ Google login failed");
+          toast.error(data.error || "Google login failed");
         }
       } catch (err) {
-        toast.error("❌ Something went wrong");
+        toast.error("Something went wrong");
       }
     },
     [router]
   );
 
-  // ✅ Load Google script
+  // Load Google script
   useEffect(() => {
     const scriptId = "google-client-script-signup";
     if (document.getElementById(scriptId)) return;
@@ -132,22 +128,27 @@ export default function SignupPage() {
   }, [handleGoogleCredentialResponse]);
 
   return (
-    <main className="relative bg-gradient-to-b mt-12 from-black via-[#0f3e3b] to-black flex items-center justify-center min-h-screen">
-      {/* Liquid Chrome Background */}
+    <main className="relative bg-gradient-to-b from-black via-[#0f3e3b] to-black flex items-center justify-center min-h-screen">
       <div className="absolute inset-0 z-0">
-        <LiquidChrome baseColor={[0.1, 0.1, 0.1]} speed={1} amplitude={0.6} interactive />
+        <LiquidChrome
+          baseColor={[0.1, 0.1, 0.1]}
+          speed={1}
+          amplitude={0.6}
+          interactive
+        />
       </div>
 
-      {/* Overlay */}
       <div className="absolute inset-0 bg-gradient-to-l from-black via-[#1e4d4a] to-black opacity-80 z-0" />
 
-      {/* Main Signup Box */}
       <div className="relative z-10 w-full max-w-5xl px-4">
         <div className="flex w-full rounded-xl overflow-hidden shadow-2xl border border-white/20 backdrop-blur-xl bg-white/10">
-          {/* Left: Form */}
           <div className="w-full md:w-1/2 p-10 flex flex-col justify-center">
-            <h2 className="text-3xl font-bold text-white text-center mb-2">Sign Up</h2>
-            <p className="text-center text-gray-300 mb-6">Join the journey to fitness</p>
+            <h2 className="text-3xl font-bold text-white text-center mb-2">
+              Sign Up
+            </h2>
+            <p className="text-center text-gray-300 mb-6">
+              Join the journey to fitness
+            </p>
 
             <input
               name="email"
@@ -187,18 +188,19 @@ export default function SignupPage() {
             </button>
 
             <div className="text-center text-gray-300 text-sm my-6">or</div>
-
             <div id="google-signin-btn" className="w-full flex justify-center mb-4" />
 
             <p className="text-center text-gray-300 text-sm">
               Already have an account?{" "}
-              <Link href="/Login" className="text-emerald-400 hover:underline font-semibold">
+              <Link
+                href="/Login"
+                className="text-emerald-400 hover:underline font-semibold"
+              >
                 Login here
               </Link>
             </p>
           </div>
 
-          {/* Right: Lottie */}
           <div className="hidden md:flex w-1/2 items-center justify-center bg-transparent">
             <div className="w-[300px] h-[300px]">
               <DotLottieReact
