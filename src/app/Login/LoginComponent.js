@@ -18,7 +18,7 @@ export default function LoginPage() {
 
   const [formData, setFormData] = useState({ email: "", password: "" });
 
-  // ✅ Redirect if already logged in
+  // Redirect if already logged in
   useEffect(() => {
     if (user) {
       if (user.email === ADMIN_EMAIL) {
@@ -33,7 +33,7 @@ export default function LoginPage() {
   useEffect(() => {
     if (searchParams?.get("logout") === "true") {
       setFormData({ email: "", password: "" });
-      toast.success("👋 Logged out successfully");
+      toast.success("Logged out successfully");
     }
   }, [searchParams]);
 
@@ -50,12 +50,12 @@ export default function LoginPage() {
     const { email, password } = formData;
 
     if (!email || !password) {
-      toast.error("❌ Email and password are required");
+      toast.error("Email and password are required");
       return;
     }
 
     if (!validateEmail(email)) {
-      toast.error("❌ Invalid email format");
+      toast.error("Invalid email format");
       return;
     }
 
@@ -69,11 +69,11 @@ export default function LoginPage() {
       const data = await res.json();
 
       if (!res.ok) {
-        toast.error(data.error || "❌ Invalid credentials");
+        toast.error(data.error || "Invalid credentials");
         return;
       }
 
-      toast.success("✅ Login successful");
+      toast.success("Login successful");
 
       if (typeof window !== "undefined") {
         localStorage.setItem("token", data.token);
@@ -81,11 +81,11 @@ export default function LoginPage() {
 
       login(data.user); // redirect handled by useEffect
     } catch {
-      toast.error("❌ Server error");
+      toast.error("Server error");
     }
   };
 
-  // ✅ Google Login callback
+  // Google Login callback
   const handleGoogleCredentialResponse = useCallback(
     async (googleResponse) => {
       try {
@@ -98,11 +98,11 @@ export default function LoginPage() {
         const data = await res.json();
 
         if (!res.ok) {
-          toast.error(data.error || "❌ Google login failed");
+          toast.error(data.error || "Google login failed");
           return;
         }
 
-        toast.success("✅ Google login successful");
+        toast.success("Google login successful");
 
         if (typeof window !== "undefined") {
           localStorage.setItem("token", data.token);
@@ -110,13 +110,13 @@ export default function LoginPage() {
 
         login(data.user);
       } catch {
-        toast.error("❌ Something went wrong");
+        toast.error("Something went wrong");
       }
     },
     [login]
   );
 
-  // ✅ Initialize Google button after script loads
+  // Initialize Google button after script loads
   const onGoogleScriptLoad = () => {
     if (
       typeof window !== "undefined" &&
@@ -165,60 +165,46 @@ export default function LoginPage() {
               Welcome back to your fitness journey
             </p>
 
-            {/* Only show email/password form if user not logged in */}
-            {!user && (
-              <>
-                <input
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  placeholder="Email"
-                  className="w-full p-3 border text-sm text-white border-white/30 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white/10"
-                  type="email"
-                  required
-                />
+            {/* Email/password form is optional, can keep or remove */}
+            <input
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="Email"
+              className="w-full p-3 border text-sm text-white border-white/30 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white/10"
+              type="email"
+            />
 
-                <input
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  placeholder="Password"
-                  className="w-full p-3 border text-sm text-white border-white/30 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white/10"
-                  type="password"
-                  required
-                />
+            <input
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              placeholder="Password"
+              className="w-full p-3 border text-sm text-white border-white/30 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white/10"
+              type="password"
+            />
 
-                <button
-                  onClick={handleSubmit}
-                  className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded text-sm font-medium transition duration-200 shadow"
-                >
-                  Login
-                </button>
+            <button
+              onClick={handleSubmit}
+              className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded text-sm font-medium transition duration-200 shadow mb-4"
+            >
+              Login
+            </button>
 
-                <div className="text-center text-gray-300 text-sm my-6">or</div>
-              </>
-            )}
+            <div className="text-center text-gray-300 text-sm my-6">or</div>
 
-            {/* ✅ Google Sign In Button always rendered */}
+            {/* Google Sign In Button always visible */}
             <div id="google-signin-btn" className="w-full flex justify-center mb-4" />
 
-            {!user && (
-              <p className="text-center text-gray-300 text-sm">
-                Don’t have an account?{" "}
-                <Link
-                  href="/Signup"
-                  className="text-emerald-400 hover:underline font-semibold"
-                >
-                  Register
-                </Link>
-              </p>
-            )}
-
-            {user && (
-              <p className="text-center text-gray-300 text-sm">
-                Signed in as <span className="font-semibold">{user.name}</span>
-              </p>
-            )}
+            <p className="text-center text-gray-300 text-sm">
+              Don’t have an account?{" "}
+              <Link
+                href="/Signup"
+                className="text-emerald-400 hover:underline font-semibold"
+              >
+                Register
+              </Link>
+            </p>
           </div>
 
           {/* Right: Lottie */}
