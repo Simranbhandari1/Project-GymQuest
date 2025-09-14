@@ -3,7 +3,7 @@ import HeroSection from "../organisms/FrontHome/Hero";
 import Features from "../organisms/FrontHome/Feature";
 import ExpertTrainersSection from "../organisms/FrontHome/ExpertTrainer";
 import ServicesSection from "../organisms/FrontHome/ServicesSection";
-import PlanPricingSection from "../organisms/FrontHome/PlanPricingSection";
+// import PlanPricingSection from "../organisms/FrontHome/PlanPricingSection";
 import Quote from "../organisms/FrontHome/quote";
 
 
@@ -14,7 +14,7 @@ export default function Home() {
       <Features/>
       {/* <ServicesSection/> */}
       <ExpertTrainersSection/>
-      <PlanPricingSection/>
+      {/* <PlanPricingSection/> */}
       <Quote/>
       {/* <TestimonialsSection/> */}
     </main>

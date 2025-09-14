@@ -18,7 +18,7 @@ export default function LoginPage() {
 
   const [formData, setFormData] = useState({ email: "", password: "" });
 
-  // ✅ Redirect if already logged in
+  // Redirect if already logged in
   useEffect(() => {
     if (user) {
       if (user.email === ADMIN_EMAIL) {
@@ -79,13 +79,13 @@ export default function LoginPage() {
         localStorage.setItem("token", data.token);
       }
 
-      login(data.user); // redirect handled by useEffect
+      login(data.user);
     } catch {
       toast.error("❌ Server error");
     }
   };
 
-  // ✅ Google Login callback
+  // Google Login callback
   const handleGoogleCredentialResponse = useCallback(
     async (googleResponse) => {
       try {
@@ -116,7 +116,7 @@ export default function LoginPage() {
     [login]
   );
 
-  // ✅ Initialize Google button after script loads
+  // Initialize Google button after script loads
   const onGoogleScriptLoad = () => {
     if (
       typeof window !== "undefined" &&
@@ -146,7 +146,6 @@ export default function LoginPage() {
 
   return (
     <main className="relative bg-gradient-to-b mt-12 from-black via-[#0f3e3b] to-black flex items-center justify-center min-h-screen">
-      {/* ✅ Google script with onLoad */}
       <Script
         src="https://accounts.google.com/gsi/client"
         strategy="afterInteractive"
@@ -154,7 +153,12 @@ export default function LoginPage() {
       />
 
       <div className="absolute inset-0 z-0">
-        <LiquidChrome baseColor={[0.1, 0.1, 0.1]} speed={1} amplitude={0.6} interactive />
+        <LiquidChrome
+          baseColor={[0.1, 0.1, 0.1]}
+          speed={1}
+          amplitude={0.6}
+          interactive
+        />
       </div>
 
       <div className="absolute inset-0 bg-gradient-to-l from-black via-[#1e4d4a] to-black opacity-80 z-0" />
@@ -197,7 +201,7 @@ export default function LoginPage() {
 
             <div className="text-center text-gray-300 text-sm my-6">or</div>
 
-            {/* ✅ Google Sign In Button */}
+            {/* Google Sign In Button */}
             <div id="google-signin-btn" className="w-full flex justify-center mb-4" />
 
             <p className="text-center text-gray-300 text-sm">
@@ -211,11 +215,14 @@ export default function LoginPage() {
             </p>
           </div>
 
-          {/* Right: Lottie */}
-          <div className="hidden md:flex w-1/2 items-center justify-center bg-transparent">
-            <div className="w-[300px] h-[300px]">
+          {/* Right: Lottie Animations */}
+          <div className="hidden md:flex w-1/2 flex-col items-center justify-center bg-transparent gap-6">
+           
+
+            {/* New Lottie */}
+            <div className="w-[400px] h-[400px]">
               <DotLottieReact
-                src="https://lottie.host/9cc135f0-dd0e-4ae0-a41e-0de34ca4c6d4/f9osQ3Wd0B.lottie"
+                src="https://lottie.host/32ae7a00-ef07-408c-8ccb-4c9c76e4cbc5/gAHOTm4Mk8.lottie"
                 loop
                 autoplay
               />

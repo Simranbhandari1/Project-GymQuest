@@ -202,12 +202,12 @@ export default function SignupPage() {
           </div>
 
           <div className="hidden md:flex w-1/2 items-center justify-center bg-transparent">
-            <div className="w-[300px] h-[300px]">
-              <DotLottieReact
-                src="https://lottie.host/9cc135f0-dd0e-4ae0-a41e-0de34ca4c6d4/f9osQ3Wd0B.lottie"
-                loop
-                autoplay
-              />
+             <div className="w-[400px] h-[400px]">
+                          <DotLottieReact
+                            src="https://lottie.host/32ae7a00-ef07-408c-8ccb-4c9c76e4cbc5/gAHOTm4Mk8.lottie"
+                            loop
+                            autoplay
+                          />
             </div>
           </div>
         </div>
