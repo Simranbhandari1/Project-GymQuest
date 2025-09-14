@@ -142,11 +142,8 @@ export default function LoginPage() {
     }
   };
 
-  if (user) return null;
-
   return (
     <main className="relative bg-gradient-to-b mt-12 from-black via-[#0f3e3b] to-black flex items-center justify-center min-h-screen">
-      {/* ✅ Google script with onLoad */}
       <Script
         src="https://accounts.google.com/gsi/client"
         strategy="afterInteractive"
@@ -168,47 +165,60 @@ export default function LoginPage() {
               Welcome back to your fitness journey
             </p>
 
-            <input
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="Email"
-              className="w-full p-3 border text-sm text-white border-white/30 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white/10"
-              type="email"
-              required
-            />
+            {/* Only show email/password form if user not logged in */}
+            {!user && (
+              <>
+                <input
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  placeholder="Email"
+                  className="w-full p-3 border text-sm text-white border-white/30 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white/10"
+                  type="email"
+                  required
+                />
 
-            <input
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="Password"
-              className="w-full p-3 border text-sm text-white border-white/30 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white/10"
-              type="password"
-              required
-            />
+                <input
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  placeholder="Password"
+                  className="w-full p-3 border text-sm text-white border-white/30 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white/10"
+                  type="password"
+                  required
+                />
 
-            <button
-              onClick={handleSubmit}
-              className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded text-sm font-medium transition duration-200 shadow"
-            >
-              Login
-            </button>
+                <button
+                  onClick={handleSubmit}
+                  className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded text-sm font-medium transition duration-200 shadow"
+                >
+                  Login
+                </button>
 
-            <div className="text-center text-gray-300 text-sm my-6">or</div>
+                <div className="text-center text-gray-300 text-sm my-6">or</div>
+              </>
+            )}
 
-            {/* ✅ Google Sign In Button */}
+            {/* ✅ Google Sign In Button always rendered */}
             <div id="google-signin-btn" className="w-full flex justify-center mb-4" />
 
-            <p className="text-center text-gray-300 text-sm">
-              Don’t have an account?{" "}
-              <Link
-                href="/Signup"
-                className="text-emerald-400 hover:underline font-semibold"
-              >
-                Register
-              </Link>
-            </p>
+            {!user && (
+              <p className="text-center text-gray-300 text-sm">
+                Don’t have an account?{" "}
+                <Link
+                  href="/Signup"
+                  className="text-emerald-400 hover:underline font-semibold"
+                >
+                  Register
+                </Link>
+              </p>
+            )}
+
+            {user && (
+              <p className="text-center text-gray-300 text-sm">
+                Signed in as <span className="font-semibold">{user.name}</span>
+              </p>
+            )}
           </div>
 
           {/* Right: Lottie */}
