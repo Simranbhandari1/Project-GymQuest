@@ -34,6 +34,11 @@ export default function ExerciseList() {
 
       {/* Foreground content */}
       <div className="relative z-10 max-w-6xl mt-20 mx-auto p-6">
+        {/* Title */}
+        <h1 className="text-6xl mt-10 font-bold text-white text-center mb-12">
+          Workout
+        </h1>
+
         <div className="grid gap-12 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 justify-center">
           {/* Loading skeletons */}
           {exercises === null &&
@@ -73,7 +78,9 @@ export default function ExerciseList() {
                   )}
                   <h2 className="text-xl font-bold mt-4">{ex.title}</h2>
                   <p className="text-gray-200">
-                    {ex.description ? ex.description.slice(0, 60) + "..." : "No description"}
+                    {ex.description
+                      ? ex.description.slice(0, 60) + "..."
+                      : "No description"}
                   </p>
                 </Link>
               );
