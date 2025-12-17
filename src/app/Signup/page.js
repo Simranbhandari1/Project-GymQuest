@@ -59,7 +59,7 @@ export default function SignupPage() {
       if (res.ok) {
         toast.success("Account created successfully");
         localStorage.setItem("user", JSON.stringify(data.user));
-        router.push("/"); // Redirect immediately
+        router.push("/");
       } else {
         toast.error(data.error || "Signup failed");
       }
@@ -112,9 +112,10 @@ export default function SignupPage() {
           callback: handleGoogleCredentialResponse,
         });
 
+        // FIXED: Removed width completely
         window.google.accounts.id.renderButton(
           document.getElementById("google-signin-btn"),
-          { theme: "outline", size: "large", width: "100%" }
+          { theme: "outline", size: "large" }
         );
       }
     };
@@ -188,6 +189,7 @@ export default function SignupPage() {
             </button>
 
             <div className="text-center text-gray-300 text-sm my-6">or</div>
+
             <div id="google-signin-btn" className="w-full flex justify-center mb-4" />
 
             <p className="text-center text-gray-300 text-sm">
@@ -202,12 +204,12 @@ export default function SignupPage() {
           </div>
 
           <div className="hidden md:flex w-1/2 items-center justify-center bg-transparent">
-             <div className="w-[400px] h-[400px]">
-                          <DotLottieReact
-                            src="https://lottie.host/32ae7a00-ef07-408c-8ccb-4c9c76e4cbc5/gAHOTm4Mk8.lottie"
-                            loop
-                            autoplay
-                          />
+            <div className="w-[400px] h-[400px]">
+              <DotLottieReact
+                src="https://lottie.host/32ae7a00-ef07-408c-8ccb-4c9c76e4cbc5/gAHOTm4Mk8.lottie"
+                loop
+                autoplay
+              />
             </div>
           </div>
         </div>

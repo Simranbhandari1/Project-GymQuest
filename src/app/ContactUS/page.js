@@ -4,6 +4,7 @@ import { useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import LiquidChrome from '../components/organisms/LiquidChrome';
+import ProtectedRoute from '../components/organisms/Access/ProtectedRoute';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -55,6 +56,7 @@ export default function ContactPage() {
   };
 
   return (
+     <ProtectedRoute>
     <div className="relative bg-gradient-to-b from-black via-[#0f3e3b] to-black mt-20 min-h-screen overflow-hidden flex items-center justify-center px-4 py-10">
       {/* Background */}
       <div className="absolute inset-0 z-0">
@@ -202,5 +204,6 @@ export default function ContactPage() {
         }
       `}</style>
     </div>
+     </ProtectedRoute>
   );
 }

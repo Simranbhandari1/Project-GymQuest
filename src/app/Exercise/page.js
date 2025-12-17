@@ -3,8 +3,9 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import LiquidChrome from "@/app/components/organisms/LiquidChrome"; // Adjust path if needed
-import { getCloudinaryUrl } from "@/lib/cloudinary"; // Helper to get Cloudinary URL
+import LiquidChrome from "@/app/components/organisms/LiquidChrome";
+import ProtectedRoute from '../components/organisms/Access/ProtectedRoute';
+import { getCloudinaryUrl } from "@/lib/cloudinary"; 
 
 export default function ExerciseList() {
   const [exercises, setExercises] = useState(null);
@@ -26,6 +27,7 @@ export default function ExerciseList() {
   );
 
   return (
+     <ProtectedRoute>
     <div className="relative min-h-screen overflow-hidden">
       {/* Background animation */}
       <div className="absolute inset-0 z-0 bg-gradient-to-b from-black via-[#0f3e3b] to-black pointer-events-none">
@@ -88,5 +90,6 @@ export default function ExerciseList() {
         </div>
       </div>
     </div>
+     </ProtectedRoute>
   );
 }
