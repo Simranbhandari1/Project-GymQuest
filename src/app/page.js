@@ -10,11 +10,8 @@ export default function HomePage() {
   return (
     
     <main className="relative h-full w-full overflow-hidden  text-white font-sans">
-      {/* <Gemini/> */}
       <Navbar />
       <Home/>
-    
-    
     </main>
   );
 }
