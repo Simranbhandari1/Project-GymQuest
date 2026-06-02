@@ -20,10 +20,12 @@ export default function DietPlanner() {
   const [htmlResult, setHtmlResult] = useState('');
   const [showForm, setShowForm] = useState(true);
 
-  const isFormComplete = Object.values(formData).every(val => val.trim() !== '');
+  const isFormComplete = Object.values(formData).every(
+    (val) => val.trim() !== '',
+  );
 
   const handleChange = (field, value) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleSubmit = async (e) => {
@@ -58,7 +60,7 @@ export default function DietPlanner() {
 
   const handleSaveHTMLDownload = () => {
     if (!htmlResult) {
-      toast.error("Nothing to download.");
+      toast.error('Nothing to download.');
       return;
     }
 
@@ -92,10 +94,14 @@ export default function DietPlanner() {
     <ProtectedRoute>
       <main className="relative bg-gradient-to-b mt-20 from-black via-[#0f3e3b] to-black min-h-screen flex items-center justify-center text-white overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <LiquidChrome baseColor={[0.1, 0.2, 0.2]} speed={1} amplitude={0.7} interactive />
+          <LiquidChrome
+            baseColor={[0.1, 0.2, 0.2]}
+            speed={1}
+            amplitude={0.7}
+            interactive
+          />
         </div>
         <div className="absolute inset-0 bg-black/70 backdrop-blur-sm z-0" />
-        <Toaster />
 
         <div className="relative z-10 flex flex-col items-center w-full max-w-6xl px-6 mt-12 mb-12">
           {showForm && (
@@ -113,11 +119,36 @@ export default function DietPlanner() {
                 { label: 'Age', field: 'age', type: 'number' },
                 { label: 'Height (cm)', field: 'height', type: 'number' },
                 { label: 'Weight (kg)', field: 'weight', type: 'number' },
-                { label: 'Fitness Goal', field: 'goal', type: 'select', options: ['Weight Loss', 'Muscle Gain', 'Maintenance', 'Improve Endurance', 'Boost Immunity', 'Body Toning'] },
-                { label: 'Diet Preference', field: 'dietPreference', type: 'select', options: ['Vegetarian', 'Non-Vegetarian', 'Vegan', 'Eggetarian'] }
+                {
+                  label: 'Fitness Goal',
+                  field: 'goal',
+                  type: 'select',
+                  options: [
+                    'Weight Loss',
+                    'Muscle Gain',
+                    'Maintenance',
+                    'Improve Endurance',
+                    'Boost Immunity',
+                    'Body Toning',
+                  ],
+                },
+                {
+                  label: 'Diet Preference',
+                  field: 'dietPreference',
+                  type: 'select',
+                  options: [
+                    'Vegetarian',
+                    'Non-Vegetarian',
+                    'Vegan',
+                    'Eggetarian',
+                  ],
+                },
               ].map(({ label, field, type = 'text', options }) => (
                 <div key={field} className="flex flex-col mb-4">
-                  <label htmlFor={field} className="text-sm font-semibold mb-1 text-white">
+                  <label
+                    htmlFor={field}
+                    className="text-sm font-semibold mb-1 text-white"
+                  >
                     {label}
                   </label>
                   {type === 'select' ? (
@@ -129,9 +160,15 @@ export default function DietPlanner() {
                       disabled={loading}
                       className="input-style"
                     >
-                      <option value="" disabled hidden>Select</option>
-                      {options.map(option => (
-                        <option key={option} value={option} className="text-black">
+                      <option value="" disabled hidden>
+                        Select
+                      </option>
+                      {options.map((option) => (
+                        <option
+                          key={option}
+                          value={option}
+                          className="text-black"
+                        >
                           {option}
                         </option>
                       ))}
@@ -229,8 +266,6 @@ export default function DietPlanner() {
     </ProtectedRoute>
   );
 }
-
-
 
 // 'use client';
 

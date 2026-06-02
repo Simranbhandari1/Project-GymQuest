@@ -1,43 +1,43 @@
-"use client";
+'use client';
 
-import React, { useState, useEffect, useRef } from "react";
-import Image from "next/image"; // ✅ Import Next.js Image
-import LiquidChrome from "../LiquidChrome";
-import toast, { Toaster } from "react-hot-toast";
+import React, { useState, useEffect, useRef } from 'react';
+import Image from 'next/image'; // ✅ Import Next.js Image
+import LiquidChrome from '../LiquidChrome';
+import toast, { Toaster } from 'react-hot-toast';
 
 const trainers = [
   {
-    name: "Esther Howard",
-    role: "Senior Fitness Trainer",
-    image: "/gym-trainer-1.jpg",
-    email: "esther.howard@example.com",
+    name: 'Esther Howard',
+    role: 'Senior Fitness Trainer',
+    image: '/gym-trainer-1.jpg',
+    email: 'esther.howard@example.com',
   },
   {
-    name: "Jenny Wilson",
-    role: "Senior Fitness Trainer",
-    image: "/gym-trainer-2.jpg",
-    email: "jenny.wilson@example.com",
+    name: 'Jenny Wilson',
+    role: 'Senior Fitness Trainer',
+    image: '/gym-trainer-2.jpg',
+    email: 'jenny.wilson@example.com',
   },
   {
-    name: "John Doe",
-    role: "Senior Fitness Trainer",
-    image: "/gym-trainer-3.jpg",
-    email: "john.doe@example.com",
+    name: 'John Doe',
+    role: 'Senior Fitness Trainer',
+    image: '/gym-trainer-3.jpg',
+    email: 'john.doe@example.com',
   },
   {
-    name: "Alex Smith",
-    role: "Senior Fitness Trainer",
-    image: "/gym-trainer-4.jpg",
-    email: "alex.smith@example.com",
+    name: 'Alex Smith',
+    role: 'Senior Fitness Trainer',
+    image: '/gym-trainer-4.jpg',
+    email: 'alex.smith@example.com',
   },
 ];
 
 export default function ExpertTrainersSection() {
   const [selectedTrainer, setSelectedTrainer] = useState(null);
   const [formData, setFormData] = useState({
-    name: "",
-    userEmail: "",
-    message: "",
+    name: '',
+    userEmail: '',
+    message: '',
   });
   const [isSending, setIsSending] = useState(false);
 
@@ -45,7 +45,7 @@ export default function ExpertTrainersSection() {
 
   useEffect(() => {
     if (selectedTrainer) {
-      setFormData({ name: "", userEmail: "", message: "" });
+      setFormData({ name: '', userEmail: '', message: '' });
       toastId.current = null;
     }
   }, [selectedTrainer]);
@@ -62,10 +62,10 @@ export default function ExpertTrainersSection() {
     setIsSending(true);
 
     try {
-      const res = await fetch("/api/auth/send-query", {
-        method: "POST",
+      const res = await fetch('/api/auth/send-query', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           trainerEmail: selectedTrainer.email,
@@ -79,7 +79,7 @@ export default function ExpertTrainersSection() {
 
       if (res.ok) {
         if (!toastId.current) {
-          toastId.current = toast.success("Your query was sent successfully!", {
+          toastId.current = toast.success('Your query was sent successfully!', {
             duration: 3000,
           });
           setSelectedTrainer(null);
@@ -87,14 +87,14 @@ export default function ExpertTrainersSection() {
       } else {
         if (!toastId.current) {
           toastId.current = toast.error(
-            "Failed to send query: " + (data.error || "Unknown error")
+            'Failed to send query: ' + (data.error || 'Unknown error'),
           );
         }
       }
     } catch (error) {
       if (!toastId.current) {
         toastId.current = toast.error(
-          "An error occurred while sending your query."
+          'An error occurred while sending your query.',
         );
       }
     } finally {
@@ -105,7 +105,6 @@ export default function ExpertTrainersSection() {
   return (
     <section className="relative overflow-hidden py-20 px-6 md:px-12 text-white bg-black">
       {/* Toast container */}
-      <Toaster position="top-right" reverseOrder={false} />
 
       {/* 🌊 Liquid Chrome Background */}
       <div className="absolute inset-0 z-0 pointer-events-none">
@@ -217,7 +216,7 @@ export default function ExpertTrainersSection() {
                 disabled={isSending}
                 className="w-full py-3 bg-green-500 hover:bg-green-600 rounded-lg font-semibold transition disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isSending ? "Sending..." : "Send Query"}
+                {isSending ? 'Sending...' : 'Send Query'}
               </button>
             </form>
           </div>

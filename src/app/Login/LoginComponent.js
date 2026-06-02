@@ -1,42 +1,57 @@
-"use client";
+'use client';
 
-import React, { useEffect, useState, useCallback } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { toast } from "react-hot-toast";
-import Link from "next/link";
-import { useAuth } from "@/app/api/auth/AuthContext";
-import { DotLottieReact } from "@lottiefiles/dotlottie-react";
-import LiquidChrome from "../components/organisms/LiquidChrome";
-import Script from "next/script";
+import React, { useEffect, useState, useRef, useCallback } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { toast } from 'react-hot-toast';
+import Link from 'next/link';
+import { useAuth } from '@/app/api/auth/AuthContext';
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
+import LiquidChrome from '../components/organisms/LiquidChrome';
+import Script from 'next/script';
 
-const ADMIN_EMAIL = "admin_@gmail.com";
+const ADMIN_EMAIL = 'admin_@gmail.com';
 
 export default function LoginPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { login, user } = useAuth();
 
-  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [formData, setFormData] = useState({ email: '', password: '' });
 
   // Redirect if already logged in
   useEffect(() => {
     if (user) {
       if (user.email === ADMIN_EMAIL) {
-        router.replace("/Admin");
+        router.replace('/Admin');
       } else {
-        router.replace("/");
+        router.replace('/');
       }
     }
   }, [user, router]);
 
   // Reset form on logout
+  // useEffect(() => {
+  //   if (searchParams?.get('logout') === 'true') {
+  //     setFormData({ email: '', password: '' });
+  //     toast.success('Logged out successfully');
+  //   }
+  // }, [searchParams]);
+
+  const hasShownToast = useRef(false);
+
   useEffect(() => {
-    if (searchParams?.get("logout") === "true") {
-      setFormData({ email: "", password: "" });
-      toast.success("👋 Logged out successfully");
+    const isLogout = searchParams?.get('logout');
+
+    if (isLogout === 'true' && !hasShownToast.current) {
+      hasShownToast.current = true;
+
+      setFormData({ email: '', password: '' });
+
+      toast.success('Logged out successfully');
+
+      window.history.replaceState({}, '', '/Login');
     }
   }, [searchParams]);
-
   const validateEmail = useCallback((email) => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   }, []);
@@ -50,38 +65,38 @@ export default function LoginPage() {
     const { email, password } = formData;
 
     if (!email || !password) {
-      toast.error("❌ Email and password are required");
+      toast.error('Email and password are required');
       return;
     }
 
     if (!validateEmail(email)) {
-      toast.error("❌ Invalid email format");
+      toast.error('Invalid email format');
       return;
     }
 
     try {
-      const res = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });
 
       const data = await res.json();
 
       if (!res.ok) {
-        toast.error(data.error || "❌ Invalid credentials");
+        toast.error(data.error || 'Invalid credentials');
         return;
       }
 
-      toast.success("✅ Login successful");
+      toast.success(' Login successful');
 
-      if (typeof window !== "undefined") {
-        localStorage.setItem("token", data.token);
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('token', data.token);
       }
 
       login(data.user);
     } catch {
-      toast.error("❌ Server error");
+      toast.error(' Server error');
     }
   };
 
@@ -89,37 +104,37 @@ export default function LoginPage() {
   const handleGoogleCredentialResponse = useCallback(
     async (googleResponse) => {
       try {
-        const res = await fetch("/api/auth/google", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
+        const res = await fetch('/api/auth/google', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ credential: googleResponse.credential }),
         });
 
         const data = await res.json();
 
         if (!res.ok) {
-          toast.error(data.error || "❌ Google login failed");
+          toast.error(data.error || ' Google login failed');
           return;
         }
 
-        toast.success("✅ Google login successful");
+        toast.success('Google login successful');
 
-        if (typeof window !== "undefined") {
-          localStorage.setItem("token", data.token);
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('token', data.token);
         }
 
         login(data.user);
       } catch {
-        toast.error("❌ Something went wrong");
+        toast.error('Something went wrong');
       }
     },
-    [login]
+    [login],
   );
 
   // Initialize Google button after script loads
   const onGoogleScriptLoad = () => {
     if (
-      typeof window !== "undefined" &&
+      typeof window !== 'undefined' &&
       window.google &&
       process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID
     ) {
@@ -128,12 +143,12 @@ export default function LoginPage() {
         callback: handleGoogleCredentialResponse,
       });
 
-      const btn = document.getElementById("google-signin-btn");
+      const btn = document.getElementById('google-signin-btn');
       if (btn) {
         window.google.accounts.id.renderButton(btn, {
-          theme: "outline",
-          size: "large",
-          width: "100%",
+          theme: 'outline',
+          size: 'large',
+          width: '100%',
         });
       }
 
@@ -167,7 +182,9 @@ export default function LoginPage() {
         <div className="flex w-full rounded-xl overflow-hidden shadow-2xl border border-white/20 backdrop-blur-xl bg-white/10">
           {/* Left: Form */}
           <div className="w-full md:w-1/2 p-10 flex flex-col justify-center">
-            <h2 className="text-3xl font-bold text-white text-center mb-2">Login</h2>
+            <h2 className="text-3xl font-bold text-white text-center mb-2">
+              Login
+            </h2>
             <p className="text-center text-gray-300 mb-6">
               Welcome back to your fitness journey
             </p>
@@ -202,10 +219,13 @@ export default function LoginPage() {
             <div className="text-center text-gray-300 text-sm my-6">or</div>
 
             {/* Google Sign In Button */}
-            <div id="google-signin-btn" className="w-full flex justify-center mb-4" />
+            <div
+              id="google-signin-btn"
+              className="w-full flex justify-center mb-4"
+            />
 
             <p className="text-center text-gray-300 text-sm">
-              Don’t have an account?{" "}
+              Don’t have an account?{' '}
               <Link
                 href="/Signup"
                 className="text-emerald-400 hover:underline font-semibold"
@@ -217,8 +237,6 @@ export default function LoginPage() {
 
           {/* Right: Lottie Animations */}
           <div className="hidden md:flex w-1/2 flex-col items-center justify-center bg-transparent gap-6">
-           
-
             {/* New Lottie */}
             <div className="w-[400px] h-[400px]">
               <DotLottieReact

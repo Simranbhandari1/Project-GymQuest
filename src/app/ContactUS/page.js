@@ -63,7 +63,6 @@ export default function ContactPage() {
         <LiquidChrome baseColor={[0.05, 0.1, 0.1]} interactive />
       </div>
 
-      <Toaster position="top-right" />
 
       {/* Content */}
       <div className="relative z-10 w-full max-w-2xl bg-white/10 border border-white/20 backdrop-blur-md rounded-2xl shadow-2xl p-6 md:p-10 text-white text-center">

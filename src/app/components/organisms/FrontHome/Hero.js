@@ -63,7 +63,7 @@ export default function HeroSection() {
       <div className="absolute inset-0 bg-gradient-to-l from-black via-[#1e4d4a] to-black opacity-80 z-0" />
 
       {/* LEFT CONTENT */}
-     <div className="w-[90%] md:w-[55%] mx-auto md:ml-10 z-10">
+     <div className="w-[90%] md:w-[55%] mx-auto  md:ml-10 z-10">
   <div
     id="leftContent"
     className="text-left px-6 py-6 md:px-10 md:py-10 border border-white/20 bg-white/5 backdrop-blur-md rounded-3xl animate-glow flex flex-col justify-between"

@@ -1,8 +1,8 @@
-"use client";
-import { useEffect, useState } from "react";
-import { FaTrashAlt } from "react-icons/fa";
-import { MdPeople } from "react-icons/md";
-import toast, { Toaster } from "react-hot-toast";
+'use client';
+import { useEffect, useState } from 'react';
+import { FaTrashAlt } from 'react-icons/fa';
+import { MdPeople } from 'react-icons/md';
+import toast, { Toaster } from 'react-hot-toast';
 
 export default function AdminUsersPage() {
   const [users, setUsers] = useState([]);
@@ -15,17 +15,17 @@ export default function AdminUsersPage() {
 
   const fetchUsers = async () => {
     try {
-      const res = await fetch("/api/Admin/users?email=admin_@gmail.com");
+      const res = await fetch('/api/Admin/users?email=admin_@gmail.com');
       const data = await res.json();
 
       if (res.ok && data.success) {
         setUsers(data.users);
       } else {
-        toast.error("Access denied");
+        toast.error('Access denied');
       }
     } catch (error) {
-      console.error("Fetch Error:", error);
-      toast.error("Something went wrong!");
+      console.error('Fetch Error:', error);
+      toast.error('Something went wrong!');
     }
   };
 
@@ -37,19 +37,19 @@ export default function AdminUsersPage() {
   const deleteUser = async () => {
     try {
       const res = await fetch(`/api/Admin/users/${selectedUserId}`, {
-        method: "DELETE",
+        method: 'DELETE',
       });
       const data = await res.json();
 
       if (res.ok && data.success) {
         setUsers(users.filter((u) => u._id !== selectedUserId));
-        toast.success("User deleted successfully");
+        toast.success('User deleted successfully');
       } else {
-        toast.error("Failed to delete user");
+        toast.error('Failed to delete user');
       }
     } catch (error) {
-      console.error("Delete Error:", error);
-      toast.error("Something went wrong");
+      console.error('Delete Error:', error);
+      toast.error('Something went wrong');
     } finally {
       setShowConfirm(false);
       setSelectedUserId(null);
@@ -58,8 +58,6 @@ export default function AdminUsersPage() {
 
   return (
     <div className="p-6 mt-20">
-      <Toaster position="top-right" reverseOrder={false} />
-
       {/* Page Title */}
       <div className="flex items-center space-x-2 mb-6">
         <MdPeople className="text-3xl text-[#2e8b57]" />

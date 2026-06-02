@@ -1,23 +1,22 @@
-"use client";
+'use client';
 
-import { useEffect, useState, useCallback } from "react";
-import { useRouter } from "next/navigation";
-import { toast } from "react-hot-toast";
-import Link from "next/link";
-import { DotLottieReact } from "@lottiefiles/dotlottie-react";
-import LiquidChrome from "../components/organisms/LiquidChrome";
+import { useEffect, useState, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
+import { toast } from 'react-hot-toast';
+import Link from 'next/link';
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
+import LiquidChrome from '../components/organisms/LiquidChrome';
 
 export default function SignupPage() {
   const router = useRouter();
   const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-    confirmPassword: "",
+    email: '',
+    password: '',
+    confirmPassword: '',
   });
 
   // Email validator
-  const validateEmail = (email) =>
-    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -28,43 +27,43 @@ export default function SignupPage() {
     const { email, password, confirmPassword } = formData;
 
     if (!email || !password || !confirmPassword) {
-      toast.error("All fields are required");
+      toast.error('All fields are required');
       return;
     }
 
     if (!validateEmail(email)) {
-      toast.error("Invalid email format");
+      toast.error('Invalid email format');
       return;
     }
 
     if (password.length < 6) {
-      toast.error("Password must be at least 6 characters");
+      toast.error('Password must be at least 6 characters');
       return;
     }
 
     if (password !== confirmPassword) {
-      toast.error("Passwords do not match");
+      toast.error('Passwords do not match');
       return;
     }
 
     try {
-      const res = await fetch("/api/auth/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const res = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });
 
       const data = await res.json();
 
       if (res.ok) {
-        toast.success("Account created successfully");
-        localStorage.setItem("user", JSON.stringify(data.user));
-        router.push("/");
+        toast.success('Account created successfully');
+        localStorage.setItem('user', JSON.stringify(data.user));
+        router.push('/');
       } else {
-        toast.error(data.error || "Signup failed");
+        toast.error(data.error || 'Signup failed');
       }
     } catch (err) {
-      toast.error("Server error");
+      toast.error('Server error');
     }
   };
 
@@ -72,35 +71,35 @@ export default function SignupPage() {
   const handleGoogleCredentialResponse = useCallback(
     async (response) => {
       try {
-        const res = await fetch("/api/auth/google", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
+        const res = await fetch('/api/auth/google', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ credential: response.credential }),
         });
 
         const data = await res.json();
 
         if (res.ok) {
-          toast.success("Logged in with Google");
-          localStorage.setItem("user", JSON.stringify(data.user));
-          router.push("/");
+          toast.success('Logged in with Google');
+          localStorage.setItem('user', JSON.stringify(data.user));
+          router.push('/');
         } else {
-          toast.error(data.error || "Google login failed");
+          toast.error(data.error || 'Google login failed');
         }
       } catch (err) {
-        toast.error("Something went wrong");
+        toast.error('Something went wrong');
       }
     },
-    [router]
+    [router],
   );
 
   // Load Google script
   useEffect(() => {
-    const scriptId = "google-client-script-signup";
+    const scriptId = 'google-client-script-signup';
     if (document.getElementById(scriptId)) return;
 
-    const script = document.createElement("script");
-    script.src = "https://accounts.google.com/gsi/client";
+    const script = document.createElement('script');
+    script.src = 'https://accounts.google.com/gsi/client';
     script.async = true;
     script.defer = true;
     script.id = scriptId;
@@ -114,8 +113,8 @@ export default function SignupPage() {
 
         // FIXED: Removed width completely
         window.google.accounts.id.renderButton(
-          document.getElementById("google-signin-btn"),
-          { theme: "outline", size: "large" }
+          document.getElementById('google-signin-btn'),
+          { theme: 'outline', size: 'large' },
         );
       }
     };
@@ -182,7 +181,11 @@ export default function SignupPage() {
             />
 
             <button
-              onClick={handleSubmit}
+              // onClick={handleSubmit}
+              onClick={() => {
+                console.log('🔥 BUTTON CLICKED');
+                handleSubmit();
+              }}
               className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded text-sm font-medium transition duration-200 shadow"
             >
               Create Account
@@ -190,10 +193,13 @@ export default function SignupPage() {
 
             <div className="text-center text-gray-300 text-sm my-6">or</div>
 
-            <div id="google-signin-btn" className="w-full flex justify-center mb-4" />
+            <div
+              id="google-signin-btn"
+              className="w-full flex justify-center mb-4"
+            />
 
             <p className="text-center text-gray-300 text-sm">
-              Already have an account?{" "}
+              Already have an account?{' '}
               <Link
                 href="/Login"
                 className="text-emerald-400 hover:underline font-semibold"
