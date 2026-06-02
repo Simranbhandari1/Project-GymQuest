@@ -1,8 +1,13 @@
-// models/MealPlan.js
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const mealPlanSchema = new mongoose.Schema(
   {
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+    },
+
     name: String,
     age: Number,
     gender: String,
@@ -10,11 +15,19 @@ const mealPlanSchema = new mongoose.Schema(
     weight: Number,
     goal: String,
     dietPreference: String,
-    health: { type: String, default: "None" },
+    health: {
+      type: String,
+      default: 'None',
+    },
+
     htmlPlan: String,
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  },
 );
 
-const MealPlan = mongoose.models.MealPlan || mongoose.model("MealPlan", mealPlanSchema);
+const MealPlan =
+  mongoose.models.MealPlan || mongoose.model('MealPlan', mealPlanSchema);
+
 export default MealPlan;

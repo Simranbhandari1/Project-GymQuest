@@ -1,7 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
-import toast, { Toaster } from 'react-hot-toast';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/app/api/auth/AuthContext';
+import toast from 'react-hot-toast';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import LiquidChrome from '../components/organisms/LiquidChrome';
 import ProtectedRoute from '../components/organisms/Access/ProtectedRoute';
@@ -19,7 +22,11 @@ export default function DietPlanner() {
   const [loading, setLoading] = useState(false);
   const [htmlResult, setHtmlResult] = useState('');
   const [showForm, setShowForm] = useState(true);
+  const router = useRouter();
 
+  const { user } = useAuth();
+
+  useEffect(() => {}, [user]);
   const isFormComplete = Object.values(formData).every(
     (val) => val.trim() !== '',
   );
@@ -29,21 +36,82 @@ export default function DietPlanner() {
   };
 
   const handleSubmit = async (e) => {
+    // e.preventDefault();
+    // if (!isFormComplete) {
+    //   toast.error('Please fill out all required fields!');
+    //   return;
+    // }
     e.preventDefault();
-    if (!isFormComplete) {
-      toast.error('Please fill out all required fields!');
+
+    // Name validation
+    if (!formData.name.trim()) {
+      toast.error('Name is required');
+      return;
+    }
+
+    if (!/^[a-zA-Z\s]+$/.test(formData.name)) {
+      toast.error('Name should contain only letters');
+      return;
+    }
+
+    if (formData.name.trim().length < 3) {
+      toast.error('Name must be at least 3 characters');
+      return;
+    }
+
+    // Age validation
+    const age = Number(formData.age);
+
+    if (age < 10 || age > 100) {
+      toast.error('Age must be between 10 and 100');
+      return;
+    }
+
+    // Height validation
+    const height = Number(formData.height);
+
+    if (height < 100 || height > 250) {
+      toast.error('Height must be between 100cm and 250cm');
+      return;
+    }
+
+    // Weight validation
+    const weight = Number(formData.weight);
+
+    if (weight < 20 || weight > 300) {
+      toast.error('Weight must be between 20kg and 300kg');
+      return;
+    }
+
+    // Goal validation
+    if (!formData.goal) {
+      toast.error('Please select a fitness goal');
+      return;
+    }
+
+    // Diet validation
+    if (!formData.dietPreference) {
+      toast.error('Please select a diet preference');
       return;
     }
 
     setLoading(true);
     setHtmlResult('');
     setShowForm(false);
+    console.log('Sending User ID:', user._id);
 
     try {
+      console.log('User:', user);
+      console.log('User ID:', user?._id);
       const response = await fetch('/api/Gemini/ask', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userData: formData }),
+        body: JSON.stringify({
+          userData: {
+            ...formData,
+            userId: user._id,
+          },
+        }),
       });
 
       const html = await response.text();
@@ -188,13 +256,22 @@ export default function DietPlanner() {
                 </div>
               ))}
 
-              <button
-                type="submit"
-                disabled={!isFormComplete || loading}
-                className="bg-purple-600 w-full py-2 rounded-lg hover:bg-purple-700 disabled:bg-purple-300 font-semibold mt-4"
-              >
-                {loading ? 'Generating...' : 'Generate Plan'}
-              </button>
+              <div className="flex flex-col sm:flex-row gap-4 mt-6">
+                <button
+                  onClick={() => router.push('/MyPlan')}
+                  className="flex-1 bg-emerald-900 hover:bg-emerald-700 text-white font-semibold py-3 px-6 rounded-xl shadow-lg transition-all duration-300 hover:scale-[1.02]"
+                >
+                  View Previous Plans
+                </button>
+
+                <button
+                  type="submit"
+                  disabled={!isFormComplete || loading}
+                  className="flex-1 bg-emerald-900 hover:bg-emerald-700 text-white font-semibold py-3 px-6 rounded-xl shadow-lg transition-all duration-300 hover:scale-[1.02]"
+                >
+                  {loading ? 'Generating...' : 'Generate Plan'}
+                </button>
+              </div>
             </form>
           )}
 
@@ -266,195 +343,3 @@ export default function DietPlanner() {
     </ProtectedRoute>
   );
 }
-
-// 'use client';
-
-// import { useState } from 'react';
-// import toast, { Toaster } from 'react-hot-toast';
-
-// export default function DietPlanner() {
-//   const [formData, setFormData] = useState({
-//     name: '',
-//     age: '',
-//     gender: '',
-//     height: '',
-//     weight: '',
-//     goal: '',
-//     dietPreference: '',
-//     health: '',
-//   });
-
-//   const [loading, setLoading] = useState(false);
-//   const [htmlResult, setHtmlResult] = useState('');
-
-//   const isFormComplete = Object.entries(formData).every(([key, val]) => {
-//     if (key === 'health') return true; // Optional
-//     return val.trim() !== '';
-//   });
-
-//   const handleChange = (field, value) => {
-//     setFormData(prev => ({
-//       ...prev,
-//       [field]: value,
-//     }));
-//   };
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-//     if (!isFormComplete) {
-//       toast.error('Please fill out all required fields!');
-//       return;
-//     }
-
-//     setLoading(true);
-//     setHtmlResult('');
-
-//     try {
-//       const response = await fetch('/api/Gemini/ask', {
-//         method: 'POST',
-//         headers: { 'Content-Type': 'application/json' },
-//         body: JSON.stringify({ userData: formData }),
-//       });
-
-//       const html = await response.text();
-//       setHtmlResult(html);
-//       toast.success('Diet plan generated!');
-//     } catch (error) {
-//       console.error('Error generating plan:', error);
-//       toast.error('Failed to generate diet plan.');
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   const handleSave = () => {
-//     const blob = new Blob([htmlResult], { type: 'text/html' });
-//     const link = document.createElement('a');
-//     link.href = URL.createObjectURL(blob);
-//     link.download = 'weekly_diet_plan.html';
-//     document.body.appendChild(link);
-//     link.click();
-//     document.body.removeChild(link);
-//     toast.success('Diet plan saved!');
-//   };
-
-//   return (
-//     <main className="min-h-screen py-12 px-4 md:px-12 bg-gradient-to-br from-blue-100 to-purple-200 overflow-x-hidden">
-//       <Toaster />
-//       <div className="flex flex-col md:flex-row justify-center gap-10">
-//         {/* Form */}
-//         <form
-//           onSubmit={handleSubmit}
-//           className="bg-white shadow-xl p-8 mt-20 rounded-2xl w-full md:w-[40%]"
-//         >
-//           <h2 className="text-3xl font-bold text-center text-blue-700 mb-6">
-//             Personalized Diet Plan
-//           </h2>
-
-//           {[
-//             { label: 'Name', field: 'name' },
-//             { label: 'Age', field: 'age', type: 'number' },
-//             {
-//               label: 'Gender',
-//               field: 'gender',
-//               type: 'select',
-//               options: ['Male', 'Female', 'Other']
-//             },
-//             { label: 'Height (cm)', field: 'height', type: 'number' },
-//             { label: 'Weight (kg)', field: 'weight', type: 'number' },
-//             {
-//               label: 'Fitness Goal',
-//               field: 'goal',
-//               type: 'select',
-//               options: [
-//                 'Weight Loss',
-//                 'Muscle Gain',
-//                 'Maintenance',
-//                 'Improve Endurance',
-//                 'Boost Immunity',
-//                 'Body Toning'
-//               ]
-//             },
-//             {
-//               label: 'Diet Preference',
-//               field: 'dietPreference',
-//               type: 'select',
-//               options: ['Vegetarian', 'Non-Vegetarian', 'Vegan', 'Eggetarian']
-//             },
-//             { label: 'Any health problems? (optional)', field: 'health' },
-//           ].map(({ label, field, type = 'text', options }) => (
-//             <div key={field} className="flex flex-col mb-4">
-//               <label htmlFor={field} className="text-sm font-semibold text-gray-700 mb-1">
-//                 {label}
-//               </label>
-//               {type === 'select' ? (
-//                 <select
-//                   id={field}
-//                   value={formData[field]}
-//                   onChange={(e) => handleChange(field, e.target.value)}
-//                   className="border border-gray-300 rounded-lg px-4 py-2 text-black focus:outline-none focus:ring-2 focus:ring-purple-500"
-//                   disabled={loading}
-//                 >
-//                   <option value="">Select</option>
-//                   {options.map(option => (
-//                     <option key={option} value={option}>{option}</option>
-//                   ))}
-//                 </select>
-//               ) : (
-//                 <input
-//                   id={field}
-//                   type={type}
-//                   value={formData[field]}
-//                   onChange={(e) => handleChange(field, e.target.value)}
-//                   className="border border-gray-300 rounded-lg px-4 py-2 text-black focus:outline-none focus:ring-2 focus:ring-purple-500"
-//                   disabled={loading}
-//                 />
-//               )}
-//             </div>
-//           ))}
-
-//           <button
-//             type="submit"
-//             disabled={!isFormComplete || loading}
-//             className="bg-purple-600 text-white w-full py-2 rounded-lg hover:bg-purple-700 transition disabled:bg-purple-300 font-semibold mt-4"
-//           >
-//             {loading ? 'Generating...' : 'Generate Plan'}
-//           </button>
-//         </form>
-
-//         {/* Diet Plan Display */}
-//        {/* Diet Plan Display */}
-// {htmlResult && (
-//   <div className="bg-white shadow-2xl mt-20 rounded-3xl p-6 w-full md:w-[60%]">
-//     <h2 className="text-2xl font-bold text-center text-green-700 mb-4">
-//       Your Weekly Diet Plan
-//     </h2>
-//     <div className="rounded-xl overflow-hidden border-4 border-purple-300 shadow-lg">
-//       <iframe
-//         title="Weekly Diet Plan"
-//         srcDoc={htmlResult}
-//         sandbox="allow-scripts allow-same-origin"
-//         className="w-full h-[75vh] bg-white rounded-xl border-none"
-//         style={{
-//           // scrollbarWidth: 'thin',
-//           // scrollbarColor: '#a78bfa #f3f4f6',
-//         }}
-//       />
-//     </div>
-
-//     {/* Save Button Centered */}
-//     <div className="flex justify-center mt-6">
-//       <button
-//         onClick={handleSave}
-//         className="bg-green-600 text-white px-6 py-2 rounded-xl hover:bg-green-700 shadow-md transition duration-300"
-//       >
-//         Save Diet Plan
-//       </button>
-//     </div>
-//   </div>
-// )}
-
-//       </div>
-//     </main>
-//   );
-// }

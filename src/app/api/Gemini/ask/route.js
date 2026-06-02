@@ -1,6 +1,6 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
-import MealPlan from "@/lib/models/MealPlan";
-import { connectDB } from "@/lib/config/db";
+import { GoogleGenerativeAI } from '@google/generative-ai';
+import MealPlan from '@/lib/models/MealPlan';
+import { connectDB } from '@/lib/config/db';
 
 export async function POST(req) {
   try {
@@ -8,19 +8,21 @@ export async function POST(req) {
 
     const { userData } = await req.json();
 
+    console.log('Received userData:', userData);
+
     if (!userData) {
-      return new Response(
-        JSON.stringify({ error: "userData missing" }),
-        { status: 400 }
-      );
+      return new Response(JSON.stringify({ error: 'userData missing' }), {
+        status: 400,
+      });
     }
 
-    const { name, age, height, weight, goal, dietPreference } = userData;
+    const { userId, name, age, height, weight, goal, dietPreference } =
+      userData;
 
     if (!name || !age || !height || !weight || !goal || !dietPreference) {
       return new Response(
-        JSON.stringify({ error: "Missing required fields" }),
-        { status: 400 }
+        JSON.stringify({ error: 'Missing required fields' }),
+        { status: 400 },
       );
     }
 
@@ -87,20 +89,21 @@ Return the full HTML with:
 `;
 
     const model = genAI.getGenerativeModel({
-      model: "gemini-2.5-flash",
+      model: 'gemini-2.5-flash',
     });
 
     const result = await model.generateContent(prompt);
     const rawHTML = await result.response.text();
 
-    const cleanHTML = rawHTML.replace(/```html|```/g, "").trim();
+    const cleanHTML = rawHTML.replace(/```html|```/g, '').trim();
 
-    const finalHTML = cleanHTML.startsWith("<!DOCTYPE")
-      ? cleanHTML
-      : cleanHTML;
+    const finalHTML = cleanHTML.startsWith('<!DOCTYPE') ? cleanHTML : cleanHTML;
 
     // Save to DB
+    console.log('Saving userId:', userId);
+
     await MealPlan.create({
+      userId,
       name,
       age,
       height,
@@ -108,214 +111,20 @@ Return the full HTML with:
       goal,
       dietPreference,
       htmlPlan: finalHTML,
-      createdAt: new Date(),
     });
-
     return new Response(finalHTML, {
       status: 200,
-      headers: { "Content-Type": "text/html" },
+      headers: { 'Content-Type': 'text/html' },
     });
-
   } catch (error) {
-    console.error("Gemini error:", error);
+    console.error('Gemini error:', error);
 
     return new Response(
       JSON.stringify({
-        error: "Server error generating meal plan",
+        error: 'Server error generating meal plan',
         details: error.message,
       }),
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
-
-
-
-// import { GoogleGenerativeAI } from "@google/generative-ai";
-// import MealPlan from "@/lib/models/MealPlan";
-// import { connectDB } from "@/lib/config/db";
-
-// const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-
-// export async function POST(req) {
-//   try {
-//     await connectDB();
-
-//     const { userData } = await req.json();
-
-//     if (!userData) {
-//       return new Response(
-//         JSON.stringify({ error: "userData missing" }),
-//         { status: 400 }
-//       );
-//     }
-
-//     const { name, age, gender, height, weight, goal, dietPreference, health } =
-//       userData;
-
-//     // Validate required fields
-//     if (!name || !age || !height || !weight || !goal) {
-//       return new Response(
-//         JSON.stringify({ error: "Missing required fields" }),
-//         { status: 400 }
-//       );
-//     }
-
-//     const prompt = `
-// You are a professional nutrition coach.
-
-// Generate a 7-day weekly plan in PURE HTML using ONLY:
-// <div>, <h3>, <ul>, <li>.
-
-// Wrap everything inside:
-// <div class="weekly-plan"> ... </div>
-
-// User details:
-// Name: ${name}
-// Age: ${age}
-// Gender: ${gender}
-// Height: ${height} cm
-// Weight: ${weight} kg
-// Goal: ${goal}
-// Diet Preference: ${dietPreference}
-// Health Conditions: ${health || "None"}
-
-// Do NOT return any text outside HTML.
-//     `;
-
-//     // ⭐ NEW SDK MODEL CALL
-//     const model = genAI.getGenerativeModel({
-//       model: "gemini-1.5-flash-latest",
-//     });
-
-//     const result = await model.generateContent(prompt);
-
-//     const text = await result.response.text();
-
-//     // Save to DB
-//     await MealPlan.create({
-//       name,
-//       age,
-//       gender,
-//       height,
-//       weight,
-//       goal,
-//       dietPreference,
-//       health: health || "None",
-//       htmlPlan: text,
-//     });
-
-//     return new Response(text, {
-//       status: 200,
-//       headers: { "Content-Type": "text/html" },
-//     });
-
-//   } catch (error) {
-//     console.error("Gemini error:", error);
-
-//     return new Response(
-//       JSON.stringify({
-//         error: "Server error generating meal plan",
-//         details: error.message,
-//       }),
-//       { status: 500 }
-//     );
-//   }
-// }
-
-
-
-
-// import { GoogleGenerativeAI } from "@google/generative-ai";
-
-// const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-
-// export async function POST(req) {
-//   try {
-//     const { age, weight, height, goal, diet, health } = await req.json();
-
-//     if (!age || !weight || !height || !goal || !diet) {
-//       return new Response(
-//         JSON.stringify({ error: "All fields are required." }),
-//         { status: 400, headers: { "Content-Type": "application/json" } }
-//       );
-//     }
-
-//     const prompt = `
-// You are a professional fitness and nutrition expert.
-
-// Create a personalized 7-day gym diet plan for the following user:
-
-// - Age: ${age} years
-// - Weight: ${weight} kg
-// - Height: ${height} cm
-// - Goal: ${goal}
-// - Diet Preference: ${diet}
-// - Health Issues: ${health}
-
-// Provide the plan in a neat HTML format with:
-// - A title and intro
-// - 7 sections (one for each day)
-// - Each day should include: Breakfast, Snack, Lunch, Snack, Dinner
-// - Use clean styling (white background, readable fonts)
-
-// Only return the complete HTML content with <!DOCTYPE html>, <html>, <head>, and <body>. No explanation or extra text.
-// `;
-
-//     const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" }); // or your preferred version
-//     const result = await model.generateContent(prompt);
-//     const rawHTML = await result.response.text();
-
-//     // Clean code blocks like ```html
-//     const cleanHTML = rawHTML.replace(/```html|```/g, "").trim();
-
-//     // Wrap in fallback HTML template in case Gemini doesn’t return <html>
-//     const wrappedHTML = cleanHTML.startsWith("<!DOCTYPE")
-//       ? cleanHTML
-//       : `
-//         <!DOCTYPE html>
-//         <html lang="en">
-//           <head>
-//             <meta charset="UTF-8" />
-//             <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-//             <title>Diet Plan</title>
-//             <style>
-//               body {
-//                 background-color: white;
-//                 color: black;
-//                 padding: 20px;
-//                 font-family: Arial, sans-serif;
-//               }
-//               h1, h2 {
-//                 color: #2e2e2e;
-//               }
-//               section {
-//                 margin-bottom: 20px;
-//                 border-bottom: 1px solid #ddd;
-//                 padding-bottom: 10px;
-//               }
-//             </style>
-//           </head>
-//           <body>
-//             <h1>Your 7-Day Diet Plan</h1>
-//             ${cleanHTML}
-//           </body>
-//         </html>
-//       `;
-
-//     return new Response(wrappedHTML, {
-//       status: 200,
-//       headers: { "Content-Type": "text/html" },
-//     });
-
-//   } catch (error) {
-//     console.error("Gemini error:", error);
-//     return new Response(
-//       JSON.stringify({ error: "Failed to generate diet plan." }),
-//       {
-//         status: 500,
-//         headers: { "Content-Type": "application/json" },
-//       }
-//     );
-//   }
-// }

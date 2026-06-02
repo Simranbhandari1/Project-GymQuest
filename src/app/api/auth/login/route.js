@@ -10,7 +10,10 @@ export async function POST(req) {
     const { email, password } = await req.json();
 
     if (!email || !password) {
-      return NextResponse.json({ error: 'Email and password are required' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'Email and password are required' },
+        { status: 400 },
+      );
     }
 
     await connectDB();
@@ -18,13 +21,19 @@ export async function POST(req) {
     const user = await User.findOne({ email });
 
     if (!user || !user.password) {
-      return NextResponse.json({ error: 'Invalid email or password' }, { status: 401 });
+      return NextResponse.json(
+        { error: 'Invalid email or password' },
+        { status: 401 },
+      );
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
-      return NextResponse.json({ error: 'Invalid email or password' }, { status: 401 });
+      return NextResponse.json(
+        { error: 'Invalid email or password' },
+        { status: 401 },
+      );
     }
 
     const isAdmin = user.email === process.env.ADMIN_EMAIL;
@@ -32,13 +41,13 @@ export async function POST(req) {
     const accessToken = jwt.sign(
       { userId: user._id, email: user.email, isAdmin },
       process.env.JWT_SECRET,
-      { expiresIn: '15m' }
+      { expiresIn: '15m' },
     );
 
     const refreshToken = jwt.sign(
       { userId: user._id },
       process.env.JWT_REFRESH_SECRET,
-      { expiresIn: '7d' }
+      { expiresIn: '7d' },
     );
 
     user.refreshTokens.push(refreshToken);
@@ -50,6 +59,7 @@ export async function POST(req) {
     const response = NextResponse.json({
       message: 'Login successful',
       user: {
+        _id: user._id,
         email: user.email,
         name: user.name,
         isAdmin,
@@ -77,6 +87,9 @@ export async function POST(req) {
     return response;
   } catch (error) {
     console.error('Login error:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 },
+    );
   }
 }

@@ -82,6 +82,7 @@ export default function LoginPage() {
       });
 
       const data = await res.json();
+      console.log('Login response:', data);
 
       if (!res.ok) {
         toast.error(data.error || 'Invalid credentials');
