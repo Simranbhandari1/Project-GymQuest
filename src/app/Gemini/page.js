@@ -257,6 +257,7 @@ export default function DietPlanner() {
 
               <div className="flex flex-col sm:flex-row gap-4 mt-6">
                 <button
+                  type="button"
                   onClick={() => router.push('/MyPlan')}
                   className="flex-1 bg-emerald-900 hover:bg-emerald-700 text-white font-semibold py-3 px-6 rounded-xl shadow-lg transition-all duration-300 hover:scale-[1.02]"
                 >
