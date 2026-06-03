@@ -16,7 +16,7 @@ const progressSchema = new mongoose.Schema(
 
     bmi: Number,
 
-    goal: String,
+    // goal: String,
   },
   {
     timestamps: true,

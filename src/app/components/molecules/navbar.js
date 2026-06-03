@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Link from "next/link";
-import { useRouter, usePathname } from "next/navigation";
-import { useAuth } from "@/app/api/auth/AuthContext";
-import { FaUserCircle } from "react-icons/fa";
-import Image from "next/image";
+import { useState } from 'react';
+import Link from 'next/link';
+import { useRouter, usePathname } from 'next/navigation';
+import { useAuth } from '@/app/api/auth/AuthContext';
+import { FaUserCircle } from 'react-icons/fa';
+import Image from 'next/image';
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -15,35 +15,35 @@ export default function Navbar() {
 
   const ADMIN_EMAIL = process.env.NEXT_PUBLIC_ADMIN_EMAIL;
 
-  if (pathname.startsWith("/Admin")) return null;
+  if (pathname.startsWith('/Admin')) return null;
 
   const navLinks = [
-    { name: "Home", href: "/" },
-    { name: "Workouts", href: "/Exercise" },
-    { name: "Fitness", href: "/Gemini" },
-    { name: "Nutrition", href: "/Meals" },
-    { name: "BMI", href: "/BMI" },
-    { name: "Contact", href: "/ContactUS" },
+    { name: 'Home', href: '/' },
+    { name: 'Workouts', href: '/Exercise' },
+    { name: 'Fitness', href: '/Gemini' },
+    { name: 'Nutrition', href: '/Meals' },
+    { name: 'Progress', href: '/Progress' },
+    { name: 'Contact', href: '/ContactUS' },
   ];
 
   const finalNavLinks = [
     ...navLinks,
     ...(user &&
     user.email?.toLowerCase().trim() === ADMIN_EMAIL?.toLowerCase().trim()
-      ? [{ name: "Admin Panel", href: "/Admin" }]
+      ? [{ name: 'Admin Panel', href: '/Admin' }]
       : []),
   ];
 
   const handleLogout = async () => {
-    await fetch("/api/auth/logout", { method: "POST" });
+    await fetch('/api/auth/logout', { method: 'POST' });
     logout();
-    router.push("/Login?logout=true");
+    router.push('/Login?logout=true');
   };
 
   if (loading) return null;
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 px-4 md:px-12 py-3 bg-gradient-to-l from-gray-900 via-[#1e2f2e] to-black bg-opacity-95 backdrop-blur-md shadow-md hover:shadow-xl transition-shadow duration-300">
+    <header className="fixed top-0 left-0 right-0 z-50  px-4 md:px-12 py-3 bg-gradient-to-l from-gray-900 via-[#1e2f2e] to-black bg-opacity-95 backdrop-blur-md shadow-md hover:shadow-xl transition-shadow duration-300">
       <div className="flex items-center justify-between h-[70px] w-full">
         {/* Logo */}
         <Link href="/" className="flex items-center">
@@ -84,7 +84,7 @@ export default function Navbar() {
           ) : (
             <>
               <button
-                onClick={() => router.push("/Profile")}
+                onClick={() => router.push('/Profile')}
                 className="text-white text-3xl md:text-4xl hover:text-emerald-400 transition"
                 aria-label="Profile"
               >
@@ -114,7 +114,11 @@ export default function Navbar() {
         <div className="md:hidden  fixed inset-0 z-[999] bg-gray-900 text-white flex flex-col p-6 transition-all duration-300 ease-in-out">
           {/* Top Section */}
           <div className="flex  items-center justify-between mb-6">
-            <Link href="/" className="flex items-center" onClick={() => setMobileOpen(false)}>
+            <Link
+              href="/"
+              className="flex items-center"
+              onClick={() => setMobileOpen(false)}
+            >
               <div className="relative h-12 w-12">
                 <Image
                   src="/images/logo.jpg"
@@ -125,7 +129,9 @@ export default function Navbar() {
                   priority
                 />
               </div>
-              <span className="ml-3 text-xl font-bold tracking-wide">MuscleFactory</span>
+              <span className="ml-3 text-xl font-bold tracking-wide">
+                MuscleFactory
+              </span>
             </Link>
             <button
               className="text-4xl hover:text-red-400 transition"

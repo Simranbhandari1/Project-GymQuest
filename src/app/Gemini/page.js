@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/app/api/auth/AuthContext';
 import toast from 'react-hot-toast';
-import { DotLottieReact } from '@lottiefiles/dotlottie-react';
+
 import LiquidChrome from '../components/organisms/LiquidChrome';
 import ProtectedRoute from '../components/organisms/Access/ProtectedRoute';
 
@@ -138,11 +138,10 @@ export default function DietPlanner() {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Plan for ${formData.name}</title>
+  
 </head>
 <body>
-  <h1>Plan for ${formData.name}</h1>
-  <h2>Your Weekly Meal Planner</h2>
+ 
   ${htmlResult}
 </body>
 </html>`;
@@ -169,9 +168,9 @@ export default function DietPlanner() {
             interactive
           />
         </div>
-        <div className="absolute inset-0 bg-black/70 backdrop-blur-sm z-0" />
+        <div className="absolute w-full inset-0 bg-black/70 backdrop-blur-sm z-0" />
 
-        <div className="relative z-10 flex flex-col items-center w-full max-w-6xl px-6 mt-12 mb-12">
+        <div className="relative z-10 flex flex-col items-center w-full  px-6 mt-12 mb-12">
           {showForm && (
             <form
               onSubmit={handleSubmit}
@@ -276,7 +275,7 @@ export default function DietPlanner() {
           )}
 
           {loading && (
-            <div className="animate-pulse mt-10 w-full max-w-5xl p-6 rounded-2xl bg-gray-800/30 space-y-4 shadow-lg">
+            <div className="animate-pulse mt-2 w-full max-w-5xl p-6 rounded-2xl bg-gray-800/30 space-y-4 shadow-lg">
               <div className="h-6 bg-gray-600 rounded w-1/2 mx-auto" />
               <div className="h-4 bg-gray-700 rounded w-1/3 mx-auto mb-4" />
               {[...Array(6)].map((_, i) => (
@@ -288,26 +287,18 @@ export default function DietPlanner() {
           {htmlResult && (
             <div
               id="diet-pdf-section"
-              className="relative mt-10 w-full max-w-7xl rounded-2xl shadow-xl p-10 bg-gray-900/40 backdrop-blur-md text-white"
+              className=" mt-2 h-full   backdrop-blur-md text-black"
             >
-              <div className="absolute top-2 right-2 w-40 h-40">
-                <DotLottieReact
-                  src="https://lottie.host/2088a459-1486-4c30-a924-6b331fd9b930/xQJd444q7C.lottie"
-                  loop
-                  autoplay
-                />
-              </div>
-
-              <h3 className="text-4xl font-extrabold text-center text-white mb-2">
+              {/* <h3 className="text-4xl font-extrabold text-center text-white mb-2">
                 Plan for {formData.name}
               </h3>
 
               <h2 className="text-3xl font-bold text-center text-green-400 mb-6">
                 Your Weekly Meal Planner
-              </h2>
+              </h2> */}
 
               <div
-                className="prose prose-invert max-w-none rounded-xl overflow-hidden"
+                className=" w-full rounded-xl overflow-hidden"
                 dangerouslySetInnerHTML={{ __html: htmlResult }}
               />
 
@@ -327,6 +318,7 @@ export default function DietPlanner() {
       <style jsx>{`
         .input-style {
           width: 100%;
+
           padding: 0.5rem 1rem;
           background: transparent;
           color: white;

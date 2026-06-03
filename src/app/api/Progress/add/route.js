@@ -5,7 +5,7 @@ export async function POST(req) {
   try {
     await connectDB();
 
-    const { userId, weight, height, goal } = await req.json();
+    const { userId, weight, height } = await req.json();
 
     const bmi = (weight / Math.pow(height / 100, 2)).toFixed(1);
 
@@ -14,7 +14,7 @@ export async function POST(req) {
       weight,
       height,
       bmi,
-      goal,
+      // goal,
     });
 
     return Response.json(progress);

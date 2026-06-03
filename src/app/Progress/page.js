@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/app/api/auth/AuthContext';
 import toast from 'react-hot-toast';
+
 import {
   ResponsiveContainer,
   LineChart,
@@ -18,7 +19,7 @@ export default function ProgressTracker() {
   const [weight, setWeight] = useState('');
   const [height, setHeight] = useState('');
   const [history, setHistory] = useState([]);
-  const [goal, setGoal] = useState('');
+  // const [goal, setGoal] = useState('');
   const fetchHistory = async () => {
     if (!user?._id) return;
 
@@ -59,10 +60,10 @@ export default function ProgressTracker() {
         return;
       }
 
-      if (!goal.trim()) {
-        toast.error('Please select a fitness goal');
-        return;
-      }
+      // if (!goal.trim()) {
+      //   toast.error('Please select a fitness goal');
+      //   return;
+      // }
 
       const weightNum = Number(weight);
       const heightNum = Number(height);
@@ -96,7 +97,7 @@ export default function ProgressTracker() {
           userId: user._id,
           weight: weightNum,
           height: heightNum,
-          goal,
+          // goal,
         }),
       });
 
@@ -110,14 +111,14 @@ export default function ProgressTracker() {
 
       setWeight('');
       setHeight('');
-      setGoal('');
+      // setGoal('');
     } catch (error) {
       console.error(error);
       toast.error('Failed to save progress');
     }
   };
   return (
-    <div className="min-h-screen bg-gradient-to-b mt-20 from-black via-[#0f3e3b] to-black flex items-center justify-center px-6">
+    <div className="min-h-screen  bg-gradient-to-b mt-20 pt-8 from-black via-[#0f3e3b] to-black flex items-center justify-center px-6">
       <div className="w-full max-w-2xl bg-white/10 backdrop-blur-xl border border-emerald-500/20 rounded-3xl p-8 shadow-2xl">
         <h1 className="text-4xl font-extrabold text-center text-white mb-2">
           Progress Tracker
@@ -156,7 +157,7 @@ export default function ProgressTracker() {
             />
           </div>
 
-          <div>
+          {/* <div>
             <label className="block mb-2 text-sm font-medium text-gray-300">
               Fitness Goal
             </label>
@@ -186,7 +187,7 @@ export default function ProgressTracker() {
                 Body Toning
               </option>
             </select>
-          </div>
+          </div> */}
 
           <button
             onClick={handleSave}
@@ -243,7 +244,7 @@ export default function ProgressTracker() {
                     Weight: {item.weight} kg
                   </p>
 
-                  <p className="text-gray-300">Goal: {item.goal}</p>
+                  {/* <p className="text-gray-300">Goal: {item.goal}</p> */}
 
                   <p className="text-gray-400 text-sm">
                     {new Date(item.createdAt).toLocaleDateString()}

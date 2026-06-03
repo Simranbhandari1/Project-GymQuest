@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import LiquidChrome from "../LiquidChrome"; // optional background
-import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+import { useEffect, useState } from 'react';
+import LiquidChrome from '../LiquidChrome'; // optional background
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 
 export default function Quote() {
   const [quote, setQuote] = useState(null);
@@ -11,7 +11,7 @@ export default function Quote() {
   const fetchQuote = async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/quote");
+      const res = await fetch('/api/quote');
       const data = await res.json();
       if (data.length > 0) {
         const randomIndex = Math.floor(Math.random() * data.length);
@@ -19,7 +19,7 @@ export default function Quote() {
       }
       setLoading(false);
     } catch (err) {
-      console.error("Failed to fetch quote", err);
+      console.error('Failed to fetch quote', err);
       setLoading(false);
     }
   };
@@ -29,7 +29,7 @@ export default function Quote() {
   }, []);
 
   return (
-    <main className="relative h-screen md:h-[600px] w-full bg-black flex flex-col items-center justify-center text-white font-sans px-4">
+    <main className="relative h-screen  md:h-[600px] w-full bg-black flex flex-col items-center justify-center text-white font-sans px-4">
       {/* Optional background */}
       <div className="absolute inset-0 z-0">
         <LiquidChrome baseColor={[0.05, 0.1, 0.1]} interactive />
@@ -47,7 +47,9 @@ export default function Quote() {
           <p className="text-gray-300">Loading...</p>
         ) : quote ? (
           <>
-            <p className="text-xl md:text-2xl italic mb-4">&ldquo;{quote.quote}&rdquo;</p>
+            <p className="text-xl md:text-2xl italic mb-4">
+              &ldquo;{quote.quote}&rdquo;
+            </p>
             <p className="text-lg text-gray-300">— {quote.author}</p>
             <button
               onClick={fetchQuote}
